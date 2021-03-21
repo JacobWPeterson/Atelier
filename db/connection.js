@@ -2,16 +2,18 @@ const { Pool } = require('pg');
 
 // const pool = new Pool();
 
-
 const db = new Pool({
   user: 'jacobwpeterson',
   host: 'localhost',
-  max: 20,
+  database: 'reviews',
+  password: 'postgres',
+  port: 5432,
+  max: 50,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionTimeoutMillis: 4000,
 });
 
-pool.on('error', (err, client) => {
+db.on('error', (err) => {
   console.error('Unexpected error on idle client', err);
   process.exit(-1);
 });
