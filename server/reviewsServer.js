@@ -42,25 +42,30 @@ app.get('/reviews', (req, res) => {
       1: 0,
     },
   };
-
-  // Execute db read/find based on product_id
-  db.query(`SELECT * FROM reviews WHERE product_id = ${product_id} AND reported = false`, (err, response) => {
+  db.connect((err, client, release) => {
     if (err) {
       res.status(404).send(err.stack);
-    } else {
-      productReviews.reviews.push(response.rows);
-      response.rows.forEach((row) => {
-        memModel.ratings[row.rating] += 1;
-        if (row.recommend === false) {
-          memModel.recommended[0] += 1;
-        } else {
-          memModel.recommended[1] += 1;
-        }
-      });
-      memcache[product_id] = memModel;
-      res.status(200).send(productReviews);
-      // console.log(memcache);
     }
+    // Execute db read/find based on product_id
+    client.query(`SELECT * FROM reviews WHERE product_id = ${product_id} AND reported = false`, (err, response) => {
+      release();
+      if (err) {
+        res.status(404).send(err.stack);
+      } else {
+        productReviews.reviews.push(response.rows);
+        response.rows.forEach((row) => {
+          memModel.ratings[row.rating] += 1;
+          if (row.recommend === false) {
+            memModel.recommended[0] += 1;
+          } else {
+            memModel.recommended[1] += 1;
+          }
+        });
+        memcache[product_id] = memModel;
+        res.status(200).send(productReviews);
+        // console.log(memcache);
+      }
+    });
   });
   // delete memcache[product_id];
 });
@@ -75,38 +80,42 @@ app.get('/reviews/meta', (req, res) => {
     recommended: memcache[product_id].recommended,
     characteristics: {},
   };
-
-  // Execute db read/find based on product_id
-  db.query(`SELECT * FROM characteristics WHERE product_id = ${product_id}`, (err, response) => {
-    memcache[product_id].isNeeded = false;
-
+  db.connect((err, client, release) => {
     if (err) {
-      res.status(404).send(err.stack);
-    } else {
-      const characteristics = [];
-      const characteristicIds = [];
-      response.rows.forEach((row) => {
-        characteristics.push(row.name);
-        characteristicIds.push(row.id);
-      });
-
-      const query = `SELECT characteristic_id, AVG(value)::NUMERIC(10,4) AS total FROM characteristic_reviews WHERE characteristic_id = ANY(Array[${characteristicIds}]) GROUP BY characteristic_id ORDER BY characteristic_id`;
-      db.query(query, (error, resp) => {
-        if (error) {
-          res.status(404).send(error.stack);
-        } else {
-          let index = 0;
-          resp.rows.forEach((row) => {
-            reviewMetadata.characteristics[characteristics[index]] = {
-              id: row.characteristic_id,
-              value: row.total,
-            };
-            index += 1;
-          });
-          res.status(200).send(reviewMetadata);
-        }
-      });
+      res.status(404).send('Error acquiring client', err.stack);
     }
+    // Execute db read/find based on product_id
+    client.query(`SELECT * FROM characteristics WHERE product_id = ${product_id}`, (err, response) => {
+      memcache[product_id].isNeeded = false;
+      if (err) {
+        res.status(404).send(err.stack);
+      } else {
+        const characteristics = [];
+        const characteristicIds = [];
+        response.rows.forEach((row) => {
+          characteristics.push(row.name);
+          characteristicIds.push(row.id);
+        });
+
+        const query = `SELECT characteristic_id, AVG(value)::NUMERIC(10,4) AS total FROM characteristic_reviews WHERE characteristic_id = ANY(Array[${characteristicIds}]) GROUP BY characteristic_id ORDER BY characteristic_id`;
+        client.query(query, (error, resp) => {
+          release();
+          if (error) {
+            res.status(404).send(error.stack);
+          } else {
+            let index = 0;
+            resp.rows.forEach((row) => {
+              reviewMetadata.characteristics[characteristics[index]] = {
+                id: row.characteristic_id,
+                value: row.total,
+              };
+              index += 1;
+            });
+            res.status(200).send(reviewMetadata);
+          }
+        });
+      }
+    });
   });
   if (memcache[product_id].isNeeded === false) {
     delete memcache[product_id];
