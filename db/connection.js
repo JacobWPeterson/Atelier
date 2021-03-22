@@ -13,10 +13,10 @@ const db = new Pool({
   connectionTimeoutMillis: 4000,
 });
 
-db.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
-  process.exit(-1);
-});
+// db.on('error', (err) => {
+//   console.error('Unexpected error on idle client', err);
+//   process.exit(-1);
+// });
 // db.connect();
 
 module.exports = db;
