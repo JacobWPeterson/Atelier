@@ -19,5 +19,5 @@ scenarios:
     flow:
     - get:
         url: "/?product_id={{product_id}}"
-    # - get:
-    #     url: "/meta?product_id={{product_id}}"
+    - get:
+        url: "/meta?product_id={{product_id}}"
