@@ -124,19 +124,26 @@ app.get('/reviews/meta', (req, res) => {
 
 // Post new reviews to the database
 app.post('/reviews', (req, res) => {
-  // parse req.query
-  const { product_id } = req.query;
-  const { rating } = req.query;
-  const { summary } = req.query;
-  const { body } = req.query;
-  const { recommend } = req.query;
-  const { name } = req.query;
-  const { email } = req.query;
-  const { photos } = req.query;
-  const { characteristics } = req.query;
+  const { product_id } = req.body.params;
+  const { rating } = req.body.params;
+  const { summary } = req.body.params;
+  const { body } = req.body.params;
+  const { recommend } = req.body.params;
+  const { name } = req.body.params;
+  const { email } = req.body.params;
+  const { photos } = req.body.params;
+  const { characteristics } = req.body.params;
 
   // Execute db create for review
+  const query = `INSERT INTO reviews (product_id, rating, date,summary, body, recommend, reported, reviewer_name, reviewer_email, response, helpfulness) VALUES (${product_id}, ${rating}, CURRENT_DATE, ${summary}, ${body}, ${recommend}, f, ${name}, ${email}, null, 0)`;
 
+  db.query(query, (error, response) => {
+    if (error) {
+      res.status(404).send(error.stack);
+    } else {
+      res.sendStatus(201);
+    }
+  });
   // Execute db update for characteristics
 
   res.sendStatus(201);
