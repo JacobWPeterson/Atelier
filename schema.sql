@@ -48,7 +48,7 @@ CREATE TABLE characteristic_reviews(
 
 CREATE INDEX characteristic_id ON characteristic_reviews (characteristic_id);
 
-COPY reviews FROM 's3://arn:aws:s3:us-west-1:892190585624:accesspoint/reviewsaccess/reviews_cleaned.csv' WITH (FORMAT CSV);
+
 
 -- COPY images FROM '/Users/jacobwpeterson/Downloads/reviews_photos_cleaned.csv' WITH (FORMAT CSV);
 
