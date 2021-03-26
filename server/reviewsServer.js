@@ -12,7 +12,7 @@ const memcache = {};
 app.use(express.json());
 
 app.get('/loaderio-d61874a70c31416f34c217a26d3603b4', (req, res) => {
-  res.send('loaderio-d61874a70c31416f34c217a26d3603b4')
+  res.send('loaderio-d61874a70c31416f34c217a26d3603b4');
 });
 
 // Get all product reviews
