@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
+    "newrelic": "^7.2.0",
     "nodemon": "^2.0.7",
     "pg": "^8.5.1"
   }

@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 const express = require('express');
+require('newrelic');
 const db = require('../db/connection.js');
 
 const app = express();
@@ -9,6 +10,10 @@ const port = 3000;
 const memcache = {};
 
 app.use(express.json());
+
+app.get('/loaderio-d61874a70c31416f34c217a26d3603b4', (req, res) => {
+  res.send('loaderio-d61874a70c31416f34c217a26d3603b4')
+});
 
 // Get all product reviews
 app.get('/reviews', (req, res) => {
@@ -67,7 +72,7 @@ app.get('/reviews', (req, res) => {
       }
     });
   });
-  // delete memcache[product_id];
+  delete memcache[product_id];
 });
 
 // Get product review metadata

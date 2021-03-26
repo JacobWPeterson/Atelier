@@ -15,21 +15,21 @@ CREATE TABLE reviews(
 
 CREATE INDEX product_reviews_not_reported ON reviews (product_id, reported);
 
--- CREATE TABLE images(
---   id SERIAL,
---   review_id INTEGER NOT NULL REFERENCES reviews,
---   url TEXT NOT NULL
--- );
-
--- CREATE INDEX review_id ON images (review_id);
-
-CREATE TABLE characteristics_total(
+CREATE TABLE images(
   id SERIAL,
-  product_id INTEGER NOT NULL,
-  name VARCHAR(20) NOT NULL,
-  total_from_reviews INTEGER,
-  total_reviews INTEGER
+  review_id INTEGER NOT NULL REFERENCES reviews,
+  url TEXT NOT NULL
 );
+
+CREATE INDEX review_id ON images (review_id);
+
+-- CREATE TABLE characteristics(
+--   id SERIAL,
+--   product_id INTEGER NOT NULL,
+--   name VARCHAR(20) NOT NULL,
+--   total_from_reviews INTEGER,
+--   total_reviews INTEGER
+-- );
 
 CREATE TABLE characteristics(
   id SERIAL PRIMARY KEY,
@@ -48,10 +48,10 @@ CREATE TABLE characteristic_reviews(
 
 CREATE INDEX characteristic_id ON characteristic_reviews (characteristic_id);
 
-
+COPY reviews FROM '/Users/jacobwpeterson/Downloads/reviews_cleaned.csv' WITH (FORMAT CSV);
 
 -- COPY images FROM '/Users/jacobwpeterson/Downloads/reviews_photos_cleaned.csv' WITH (FORMAT CSV);
 
-COPY characteristics FROM 's3://arn:aws:s3:us-west-1:892190585624:accesspoint/reviewsaccess/characteristics.csv' WITH HEADER CSV;
+COPY characteristics FROM '/Users/jacobwpeterson/Downloads/characteristics.csv' WITH HEADER CSV;
 
-COPY characteristic_reviews FROM 's3://arn:aws:s3:us-west-1:892190585624:accesspoint/reviewsaccess/characteristic_reviews.csv' WITH HEADER CSV;
+COPY characteristic_reviews FROM '/Users/jacobwpeterson/Downloads/characteristic_reviews.csv' WITH HEADER CSV;

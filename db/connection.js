@@ -20,7 +20,7 @@ const db = new Pool({
   password: 'ubuntu',
   database: 'reviews',
   port: 5432,
-  max: 20,
+  max: 100,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
 });
