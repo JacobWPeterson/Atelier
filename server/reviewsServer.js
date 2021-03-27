@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
-const express = require('express');
 require('newrelic');
+const express = require('express');
 const db = require('../db/connection.js');
 
 const app = express();
@@ -68,15 +68,17 @@ app.get('/reviews', (req, res) => {
         });
         memcache[product_id] = memModel;
         res.status(200).send(productReviews);
-        // console.log(memcache);
+        console.log('upper', memcache);
       }
     });
   });
   delete memcache[product_id];
+  console.log('lower', memcache);
 });
 
 // Get product review metadata
 app.get('/reviews/meta', (req, res) => {
+  console.log('meta', memcache);
   const { product_id } = req.query;
 
   const reviewMetadata = {
