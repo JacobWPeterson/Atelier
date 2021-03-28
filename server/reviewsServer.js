@@ -68,12 +68,12 @@ app.get('/reviews', (req, res) => {
         });
         memcache[product_id] = memModel;
         res.status(200).send(productReviews);
-        console.log('upper', memcache);
+        // console.log('upper', memcache);
       }
     });
   });
   delete memcache[product_id];
-  console.log('lower', memcache);
+  // console.log('lower', memcache);
 });
 
 // Get product review metadata
