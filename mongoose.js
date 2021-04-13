@@ -1,3 +1,5 @@
+// Alternate schema for mongooose
+
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/reviews', {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true});
 

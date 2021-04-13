@@ -22,10 +22,6 @@ app.get('/reviews', (req, res) => {
   const { count } = req.query;
   const { sort } = req.query;
 
-  // if (memcache[product_id]) {
-  //   memcache[product_id].isNeeded = true;
-  // }
-
   const productReviews = {
     product: product_id,
     page,
@@ -34,7 +30,6 @@ app.get('/reviews', (req, res) => {
   };
 
   const memModel = {
-    // isNeeded: true,
     ratings: {
       1: 0,
       2: 0,
@@ -68,17 +63,14 @@ app.get('/reviews', (req, res) => {
         });
         memcache[product_id] = memModel;
         res.status(200).send(productReviews);
-        // console.log('upper', memcache);
       }
     });
   });
   delete memcache[product_id];
-  // console.log('lower', memcache);
 });
 
 // Get product review metadata
 app.get('/reviews/meta', (req, res) => {
-  console.log('meta', memcache);
   const { product_id } = req.query;
 
   const reviewMetadata = {
@@ -93,7 +85,6 @@ app.get('/reviews/meta', (req, res) => {
     }
     // Execute db read/find based on product_id
     client.query(`SELECT * FROM characteristics WHERE product_id = ${product_id}`, (err, response) => {
-      // memcache[product_id].isNeeded = false;
       if (err) {
         res.status(404).send(err.stack);
       } else {
@@ -124,9 +115,7 @@ app.get('/reviews/meta', (req, res) => {
       }
     });
   });
-  // if (memcache[product_id].isNeeded === false) {
-    delete memcache[product_id];
-  // }
+  delete memcache[product_id];
 });
 
 // Post new reviews to the database

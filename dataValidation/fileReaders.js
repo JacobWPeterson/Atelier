@@ -26,10 +26,6 @@ async function processLineByLine(readFrom, validator, writeTo) {
   }
 }
 
-// const imagesFileStream = fs.createReadStream('/Users/jacobwpeterson/Downloads/reviews_photos.csv');
-// const imagesWriteStream = fs.createWriteStream('/Users/jacobwpeterson/Downloads/reviews_photos_cleaned.csv', { flags: 'a' });
-// processLineByLine(imagesFileStream, validateImages, imagesWriteStream);
-
 const reviewsFileStream = fs.createReadStream('/Users/jacobwpeterson/Downloads/reviews.csv');
 const reviewsWriteStream = fs.createWriteStream('/Users/jacobwpeterson/Downloads/reviews_cleaned.csv', { flags: 'a' });
 processLineByLine(reviewsFileStream, validateReviews, reviewsWriteStream);

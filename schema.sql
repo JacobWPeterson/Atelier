@@ -1,3 +1,5 @@
+-- Postgres Schema
+
 CREATE TABLE reviews(
    id INTEGER NOT NULL PRIMARY KEY,
    product_id INTEGER NOT NULL,
