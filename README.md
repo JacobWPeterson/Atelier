@@ -6,7 +6,7 @@ Retail server and database optimization \
 ---
 
 ## Technologies Used
-1. Postgres
+1. PostgreSQL
 2. Node/Express.js
 3. AWS (EC2 and S3)
 4. NGINX
