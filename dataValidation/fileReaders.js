@@ -2,7 +2,7 @@ const { once } = require('events');
 const fs = require('fs');
 const readline = require('readline');
 
-const validateImages = require('./validateImages.js');
+// const validateImages = require('./validateImages.js');
 const validateReviews = require('./validateReviews.js');
 
 async function processLineByLine(readFrom, validator, writeTo) {
